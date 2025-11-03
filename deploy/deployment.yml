@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apptest
+  labels:
+    app: apptest
+  annotations:
+    kubernetes.io/change-cause: "first"
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+  strategy:
+    rollingUpdate:
+      maxSurge: 80%
+      maxUnavailable: 80%
+  selector:
+    matchLabels:
+      app: apptest
+  template:
+    metadata:
+      labels:
+        app: apptest
+    spec:
+      containers:
+      - name: nginx
+        image: cr.yandex/crpp9acq3pqq72ip67ni/myapp-test:0.1
+        ports:
+        - containerPort: 80
+        

@@ -1,0 +1,16 @@
+
+# apptest
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-apptest
+  namespace: nsapptest
+spec:
+  type: NodePort
+  selector:
+    app: apptest
+  ports:
+    - name: web-app
+      nodePort: 30999
+      port: 80
+      targetPort: 80
