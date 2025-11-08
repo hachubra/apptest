@@ -101,4 +101,3 @@ variable "metadata" {
 }
 
 variable "SSHKEY" {}
-# variable "YCAUTHKEYJSON" {}

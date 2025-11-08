@@ -7,7 +7,7 @@ terraform {
   required_version = ">=1.8.4"
   
   backend "s3" {
-    endpoint   = "https://storage.yandexcloud.net"
+    endpoints.s3   = "https://storage.yandexcloud.net"
     bucket     = "diplom-state-bucket"
     region     = "ru-central1"
     key        = "terraform.tfstate"
@@ -22,7 +22,6 @@ terraform {
 
 provider "yandex" {
   token     = var.token
-  # service_account_key_file = "${var.YCAUTHKEYJSON}"
   cloud_id  = var.cloud_id
   folder_id = var.folder_id
   zone      = var.default_zone
