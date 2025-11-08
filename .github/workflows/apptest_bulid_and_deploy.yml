@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Login to Yandex Cloud Container Registry
         id: login-cr
@@ -57,8 +57,8 @@ jobs:
           TAG=${GITHUB_REF#refs/tags/} 
           # mkdir ./deploy1/
           # cp -r ./deploy/ ./deploy1/
-          sudo sed "s/0.1/$TAG/" ./deploy/deployment.yml 
-          sudo sed "s/first/$TAG/" ./deploy/deployment.yml
+          sudo sed -i "s/0.1/$TAG/" ./deploy/deployment.yml 
+          sudo sed -i "s/first/$TAG/" ./deploy/deployment.yml
 
       - name: Deploy app
         if: github.ref_type == 'tag' # == 
