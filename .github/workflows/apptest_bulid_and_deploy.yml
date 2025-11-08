@@ -55,8 +55,6 @@ jobs:
           IMAGE_TAG: ${GITHUB_REF#refs/tags/}
         run: |
           TAG=${GITHUB_REF#refs/tags/} 
-          # cat ./deploy/deployment.yml | sed "s/latest/$TAG/"
-          # cat ./deploy/deployment.yml | sed "s/first/$TAG/"
           sed "s/latest/$TAG/" ./deploy/deployment.yml 
           sed "s/first/$TAG/" ./deploy/deployment.yml
 
@@ -68,11 +66,17 @@ jobs:
         with:
           args: apply -f ./deploy/ -n nsapptest --insecure-skip-tls-verify
 
-      - name: restart
-        if: github.ref_type == 'tag' # == 
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.CONFG_K8S }}
-        with:
-          args: rollout restart deployment/apptest -n nsapptest --insecure-skip-tls-verify
+      - name: Check deployment
+        if: github.ref_type == 'tag' # ==
+        run: |
+         cat ./deploy/deployment.yml 
+
+
+      # - name: restart
+      #   if: github.ref_type == 'tag' # == 
+      #   uses: actions-hub/kubectl@master
+      #   env:
+      #     KUBE_CONFIG: ${{ secrets.CONFG_K8S }}
+      #   with:
+      #     args: rollout restart deployment/apptest -n nsapptest --insecure-skip-tls-verify
 
