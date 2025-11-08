@@ -56,7 +56,7 @@ jobs:
         run: |
           TAG=${GITHUB_REF#refs/tags/} 
           mkdir ./deploy1/
-          cp ./deploy/ ./deploy1/
+          cp -r ./deploy/ ./deploy1/
           sudo sed "s/0.1/$TAG/" ./deploy1/deployment.yml 
           sudo sed "s/first/$TAG/" ./deploy1/deployment.yml
 
