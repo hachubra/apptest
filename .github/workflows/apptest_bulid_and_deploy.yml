@@ -10,6 +10,8 @@ on:
 jobs:
   deploy:
     name: Build and Deploy testapp
+    outputs:
+      image_tag: ${{ env.TAG }
     runs-on: ubuntu-latest
 
     steps:
@@ -21,6 +23,11 @@ jobs:
         uses: yc-actions/yc-cr-login@v2
         with:
           yc-sa-json-credentials: ${{ secrets.YCAUTHKEYJSON }}
+
+      - name: Set env TAG
+        id: step_tag
+        run: echo "TAG=$(echo ${GITHUB_REF:10})" >> $GITHUB_ENV
+        if: startsWith(github.ref, 'refs/tags/v')  
 
       - name: Build, and push image to Yandex Cloud Container Registry
         if: github.event_name == 'push' && github.ref_type != 'tag'
@@ -37,17 +44,17 @@ jobs:
         env:
           CR_REGISTRY: crpp9acq3pqq72ip67ni
           CR_REPOSITORY: myapp-test
-          IMAGE_TAG: ${{ github.ref_name }}
+          # IMAGE_TAG: ${{ github.ref_name }}
         run: |
-          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG ./docker/
-          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:${{ env.TAG } ./docker/
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:${{ env.TAG }
 
       - name: Prepare deployment
         if: github.ref_type == 'tag'
-        env:
-          IMAGE_TAG: ${{ github.ref_name }}
+        # env:
+        #   IMAGE_TAG: ${{ github.ref_name }}
         run: |
-          cat ./app/deployment/app-deployment.yaml | sed "s/latest/$IMAGE_TAG/"
+          cat ./app/deployment/app-deployment.yaml | sed "s/latest/${{ env.TAG }/"
 
       - name: Deploy app
         if: github.ref_type == 'tag'
