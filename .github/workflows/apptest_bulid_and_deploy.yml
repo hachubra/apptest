@@ -55,8 +55,10 @@ jobs:
           IMAGE_TAG: ${GITHUB_REF#refs/tags/}
         run: |
           TAG=${GITHUB_REF#refs/tags/} 
-          sudo sed "s/0.1/$TAG/" ./deploy/deployment.yml 
-          sudo sed "s/first/$TAG/" ./deploy/deployment.yml
+          mkdir ./deploy1/
+          cp ./deploy/ ./deploy1/
+          sudo sed "s/0.1/$TAG/" ./deploy1/deployment.yml 
+          sudo sed "s/first/$TAG/" ./deploy1/deployment.yml
 
       - name: Deploy app
         if: github.ref_type == 'tag' # == 
@@ -64,12 +66,12 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.CONFG_K8S }}
         with:
-          args: apply -f ./deploy/ -n nsapptest --insecure-skip-tls-verify
+          args: apply -f ./deploy1/ -n nsapptest --insecure-skip-tls-verify
 
       - name: Check deployment
         if: github.ref_type == 'tag' # ==
         run: |
-         sudo cat ./deploy/deployment.yml 
+         sudo cat ./deploy1/deployment.yml 
 
 
       # - name: restart
