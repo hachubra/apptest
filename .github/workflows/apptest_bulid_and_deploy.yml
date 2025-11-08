@@ -35,6 +35,8 @@ jobs:
           CR_REPOSITORY: myapp-test
           IMAGE_TAG: ${GITHUB_REF#refs/tags/}
         run: |
+          TAG=${GITHUB_REF#refs/tags/} 
+          sudo sed -i "s/tag/$TAG/" ./docker/myapp/index.html 
           docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY ./docker/
           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY
 
@@ -46,6 +48,7 @@ jobs:
           IMAGE_TAG: ${GITHUB_REF#refs/tags/} 
         run: |
           TAG=${GITHUB_REF#refs/tags/} 
+          sudo sed -i "s/tag/$TAG/" ./docker/myapp/index.html 
           docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$TAG ./docker/
           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$TAG
 
