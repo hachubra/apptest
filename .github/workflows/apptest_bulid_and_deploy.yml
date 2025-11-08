@@ -1,0 +1,59 @@
+name: "Testapp deploy CI/CD"
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
+jobs:
+  deploy:
+    name: Build and Deploy testapp
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Login to Yandex Cloud Container Registry
+        id: login-cr
+        uses: yc-actions/yc-cr-login@v2
+        with:
+          yc-sa-json-credentials: ${{ secrets.YCAUTHKEYJSON }}
+
+      - name: Build, and push image to Yandex Cloud Container Registry
+        if: github.event_name == 'push' && github.ref_type != 'tag'
+        env:
+          CR_REGISTRY: crpp9acq3pqq72ip67ni
+          CR_REPOSITORY: myapp-test
+          IMAGE_TAG: ${{ github.ref_name }}
+        run: |
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY ./docker/myapp/
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY
+
+      - name: Build, tag, and push image to Yandex Cloud Container Registry
+        if: github.ref_type == 'tag'
+        env:
+          CR_REGISTRY: crpp9acq3pqq72ip67ni
+          CR_REPOSITORY: myapp-test
+          IMAGE_TAG: ${{ github.ref_name }}
+        run: |
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG ./docker/myapp/
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG
+
+      - name: Prepare deployment
+        if: github.ref_type == 'tag'
+        env:
+          IMAGE_TAG: ${{ github.ref_name }}
+        run: |
+          cat ./app/deployment/app-deployment.yaml | sed "s/latest/$IMAGE_TAG/"
+
+      - name: Deploy app
+        if: github.ref_type == 'tag'
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.CONFG_K8S }}
+        with:
+          args: apply -f ./deploy/ -n nsapptest --insecure-skip-tls-verify
+          
+            
