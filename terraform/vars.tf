@@ -99,5 +99,5 @@ variable "metadata" {
         }
     }    
 }
-variable "YCAUTHKEYJSON" {}
+
 variable "SSHKEY" {}
