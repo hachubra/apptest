@@ -57,7 +57,7 @@ jobs:
           cat ./deploy/deployment.yml | sed "s/latest/${{ env.TAG }}/"
 
       - name: Deploy app
-        if: github.ref_type != 'tag' # ==
+        if: github.ref_type != 'tag' # == 
         uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.CONFG_K8S }}
