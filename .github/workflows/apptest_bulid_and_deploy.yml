@@ -50,7 +50,7 @@ jobs:
           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:${{ env.TAG }}
 
       - name: Prepare deployment
-        if: github.ref_type == 'tag'
+        if: github.ref_type != 'tag' # ==
         env:
           IMAGE_TAG: ${{ github.ref_name }}
         run: |
