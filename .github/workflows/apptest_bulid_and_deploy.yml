@@ -28,7 +28,10 @@ jobs:
       #   id: step_tag
       #   run: echo "TAG=$(echo ${GITHUB_REF:10})" >> $GITHUB_ENV
       #   if: startsWith(github.ref, 'refs/tags/v') 
-
+      - name: Get tag
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "Current tag: $TAG"
       - name: Build, and push image to Yandex Cloud Container Registry
         if: github.event_name == 'push' && github.ref_type != 'tag'
         env:
@@ -40,24 +43,24 @@ jobs:
           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY
 
       - name: Build, tag, and push image to Yandex Cloud Container Registry
-        if: github.ref_type != 'tag' # ==
+        if: github.ref_type == 'tag' # ==
         env:
           CR_REGISTRY: crpp9acq3pqq72ip67ni
           CR_REPOSITORY: myapp-test
           IMAGE_TAG: ${{ github.ref_name }}
         run: |
-          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:${{ github.ref_name }} ./docker/
-          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:${{ github.ref_name }}
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$TAG ./docker/
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$TAG
 
       - name: Prepare deployment
-        if: github.ref_type != 'tag' # ==
+        if: github.ref_type == 'tag' # ==
         env:
-          IMAGE_TAG: ${{ github.ref_name }}
+          IMAGE_TAG: $TAG
         run: |
-          cat ./deploy/deployment.yml | sed "s/latest/${{ github.ref_name }}/"
+          cat ./deploy/deployment.yml | sed "s/latest/$TAG/"
 
       - name: Deploy app
-        if: github.ref_type != 'tag' # == 
+        if: github.ref_type == 'tag' # == 
         uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.CONFG_K8S }}
