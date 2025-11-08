@@ -7,7 +7,7 @@ terraform {
   required_version = ">=1.8.4"
   
   backend "s3" {
-    endpoints.s3   = "https://storage.yandexcloud.net"
+    endpoint   = "https://storage.yandexcloud.net"
     bucket     = "diplom-state-bucket"
     region     = "ru-central1"
     key        = "terraform.tfstate"
