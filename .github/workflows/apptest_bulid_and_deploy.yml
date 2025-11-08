@@ -71,16 +71,6 @@ jobs:
           args: apply -f ./deploy/ -n nsapptest --insecure-skip-tls-verify
 
       - name: Check deployment
-        if: github.ref_type == 'tag' # ==
+        if: github.ref_type == 'tag' 
         run: |
          sudo cat ./deploy/deployment.yml 
-
-
-      # - name: restart
-      #   if: github.ref_type == 'tag' # == 
-      #   uses: actions-hub/kubectl@master
-      #   env:
-      #     KUBE_CONFIG: ${{ secrets.CONFG_K8S }}
-      #   with:
-      #     args: rollout restart deployment/apptest -n nsapptest --insecure-skip-tls-verify
-
