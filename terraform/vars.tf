@@ -82,7 +82,7 @@ variable "vms_resources" {
 }
 
 locals {
-  key = file("~/.ssh/new_key_kuber.pub")
+  # key = file("~/.ssh/new_key_kuber.pub")
   subnet_ids = {
       for k, v in yandex_vpc_subnet.subnet : v.zone => v.id 
   }
@@ -100,4 +100,4 @@ variable "metadata" {
     }    
 }
 variable "YCAUTHKEYJSON" {}
-
+variable "SSHKEY" {}

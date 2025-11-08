@@ -29,7 +29,7 @@ resource "yandex_compute_instance_group" "diplom-ks8-master" {
       nat = var.vm_nodes_nat
     }
         metadata = {
-          ssh-keys = "ubuntu:${file("~/.ssh/new_key_kuber.pub")}"
+          ssh-keys = "ubuntu:${ var.SSHKEY }"
         }
   }  
     scale_policy {
@@ -82,7 +82,7 @@ resource "yandex_compute_instance_group" "diplom-ks8-nodes" {
       nat = var.vm_nodes_nat
     }
         metadata = {
-          ssh-keys = "ubuntu:${file("~/.ssh/new_key_kuber.pub")}"
+          ssh-keys = "ubuntu:${ var.SSHKEY }"
         }
   }  
     scale_policy {
