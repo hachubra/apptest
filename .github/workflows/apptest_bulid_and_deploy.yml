@@ -54,7 +54,8 @@ jobs:
         env:
           IMAGE_TAG: ${GITHUB_REF#refs/tags/}
         run: |
-          cat ./deploy/deployment.yml | sed "s/latest/$IMAGE_TAG/"
+          TAG=${GITHUB_REF#refs/tags/} 
+          cat ./deploy/deployment.yml | sed "s/latest/$TAG/"
 
       - name: Deploy app
         if: github.ref_type == 'tag' # == 
