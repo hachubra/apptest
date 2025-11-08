@@ -29,15 +29,15 @@ jobs:
           
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="access_key=${{ secrets.YCACCESSKEY }}" -backend-config="secret_key=${{ secrets.YCSECRETKEY }}" -var "token=${{ secrets.YCOAUTHTOKEN }}"
+        run: terraform init -backend-config="access_key=${{ secrets.YCACCESSKEY }}" -backend-config="secret_key=${{ secrets.YCSECRETKEY }}" -var "token=${{ secrets.YCOAUTHTOKEN }}" -var "YCAUTHKEYJSON=${{ secrets.YCAUTHKEYJSON }}"
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -var "token=${{ secrets.YCOAUTHTOKEN }}" -var "SSHKEY=${{ secrets.SSHKEY }}" -out plan.tfplan
+        run: terraform plan -var "token=${{ secrets.YCOAUTHTOKEN }}" -var "SSHKEY=${{ secrets.SSHKEY }}" -var "YCAUTHKEYJSON=${{ secrets.YCAUTHKEYJSON }}" -out plan.tfplan
         
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
       - name: Terraform Apply
-        run: terraform apply  -var "token=${{ secrets.YCOAUTHTOKEN }}" -var "SSHKEY=${{ secrets.SSHKEY }}" -auto-approve plan.tfplan
+        run: terraform apply  -var "token=${{ secrets.YCOAUTHTOKEN }}" -var "SSHKEY=${{ secrets.SSHKEY }}" -var "YCAUTHKEYJSON=${{ secrets.YCAUTHKEYJSON }}" -auto-approve plan.tfplan
