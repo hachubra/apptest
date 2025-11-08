@@ -55,7 +55,7 @@ jobs:
           IMAGE_TAG: ${GITHUB_REF#refs/tags/}
         run: |
           TAG=${GITHUB_REF#refs/tags/} 
-          sudo sed "s/latest/$TAG/" ./deploy/deployment.yml 
+          sudo sed "s/0.1/$TAG/" ./deploy/deployment.yml 
           sudo sed "s/first/$TAG/" ./deploy/deployment.yml
 
       - name: Deploy app

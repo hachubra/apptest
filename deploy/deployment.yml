@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: cr.yandex/crpp9acq3pqq72ip67ni/myapp-test:latest
+        image: cr.yandex/crpp9acq3pqq72ip67ni/myapp-test:0.1
         ports:
         - containerPort: 80
         
