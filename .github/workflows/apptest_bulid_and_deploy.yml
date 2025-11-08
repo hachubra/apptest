@@ -66,7 +66,7 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.CONFG_K8S }}
         with:
-          args: apply -f ./deploy1/ -n nsapptest --insecure-skip-tls-verify
+          args: apply -f ./deploy/ -n nsapptest --insecure-skip-tls-verify
 
       - name: Check deployment
         if: github.ref_type == 'tag' # ==
