@@ -28,8 +28,9 @@ jobs:
         run: |
           TAG=${GITHUB_REF#refs/tags/}
           echo "Current tag: $TAG"
+
       - name: Build, and push image to Yandex Cloud Container Registry
-        if: github.event_name == 'push' && github.ref_type != 'tag'
+        if: github.ref_type != 'tag' && github.event_name == 'push'
         env:
           CR_REGISTRY: crpp9acq3pqq72ip67ni
           CR_REPOSITORY: myapp-test
