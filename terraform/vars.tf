@@ -99,4 +99,5 @@ variable "metadata" {
         }
     }    
 }
+variable "YCAUTHKEYJSON" {}
 
