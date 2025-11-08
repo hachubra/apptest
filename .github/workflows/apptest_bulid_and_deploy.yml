@@ -40,7 +40,7 @@ jobs:
           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY
 
       - name: Build, tag, and push image to Yandex Cloud Container Registry
-        if: github.ref_type == 'tag'
+        if: github.ref_type != 'tag' # ==
         env:
           CR_REGISTRY: crpp9acq3pqq72ip67ni
           CR_REPOSITORY: myapp-test
