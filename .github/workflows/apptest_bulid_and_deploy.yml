@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Get tag name
         run: echo "Tag name: ${{ env.GITHUB_REF#refs/tags/ }}"
-        
+  
   deploy:
     name: Build and Deploy testapp
     outputs:
