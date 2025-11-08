@@ -8,13 +8,6 @@ on:
       - '*'
 
 jobs:
-  get_tag_name:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get tag name
-        run: 
-          echo "Tag name:${{ env.GITHUB_REF#refs/tags/ }}"
-  
   deploy:
     name: Build and Deploy testapp
     outputs:
@@ -51,15 +44,15 @@ jobs:
         env:
           CR_REGISTRY: crpp9acq3pqq72ip67ni
           CR_REPOSITORY: myapp-test
-          # IMAGE_TAG: ${{ github.ref_name }}
+          IMAGE_TAG: ${{ github.ref_name }}
         run: |
           docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:${{ env.TAG }} ./docker/
           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:${{ env.TAG }}
 
       - name: Prepare deployment
         if: github.ref_type == 'tag'
-        # env:
-        #   IMAGE_TAG: ${{ github.ref_name }}
+        env:
+          IMAGE_TAG: ${{ github.ref_name }}
         run: |
           cat ./app/deployment/app-deployment.yaml | sed "s/latest/${{ env.TAG }}/"
 
