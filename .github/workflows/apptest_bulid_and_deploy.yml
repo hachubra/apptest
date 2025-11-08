@@ -54,7 +54,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.ref_name }}
         run: |
-          cat ./app/deployment/app-deployment.yaml | sed "s/latest/${{ env.TAG }}/"
+          cat ./deploy/deployment.yml | sed "s/latest/${{ env.TAG }}/"
 
       - name: Deploy app
         if: github.ref_type == 'tag'
