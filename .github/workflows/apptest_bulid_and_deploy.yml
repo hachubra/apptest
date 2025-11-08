@@ -11,7 +11,7 @@ jobs:
   deploy:
     name: Build and Deploy testapp
     outputs:
-      image_tag: ${{ env.TAG }
+      image_tag: ${{ env.TAG }}
     runs-on: ubuntu-latest
 
     steps:
@@ -46,15 +46,15 @@ jobs:
           CR_REPOSITORY: myapp-test
           # IMAGE_TAG: ${{ github.ref_name }}
         run: |
-          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:${{ env.TAG } ./docker/
-          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:${{ env.TAG }
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:${{ env.TAG }} ./docker/
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:${{ env.TAG }}
 
       - name: Prepare deployment
         if: github.ref_type == 'tag'
         # env:
         #   IMAGE_TAG: ${{ github.ref_name }}
         run: |
-          cat ./app/deployment/app-deployment.yaml | sed "s/latest/${{ env.TAG }/"
+          cat ./app/deployment/app-deployment.yaml | sed "s/latest/${{ env.TAG }}/"
 
       - name: Deploy app
         if: github.ref_type == 'tag'
