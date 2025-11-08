@@ -29,7 +29,7 @@ jobs:
           
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="access_key=${{ secrets.YCACCESSKEY }}" -backend-config="secret_key=${{ secrets.YCSECRETKEY }}" -variable="token=${{ secrets.YCOAUTHTOKEN }}"
+        run: terraform init -backend-config="access_key=${{ secrets.YCACCESSKEY }}" -backend-config="secret_key=${{ secrets.YCSECRETKEY }}" -var "token=${{ secrets.YCOAUTHTOKEN }}"
 
       - name: Terraform Plan
         id: plan
