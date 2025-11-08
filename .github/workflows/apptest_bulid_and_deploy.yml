@@ -55,8 +55,8 @@ jobs:
           IMAGE_TAG: ${GITHUB_REF#refs/tags/}
         run: |
           TAG=${GITHUB_REF#refs/tags/} 
-          sed "s/latest/$TAG/" ./deploy/deployment.yml 
-          sed "s/first/$TAG/" ./deploy/deployment.yml
+          sudo sed "s/latest/$TAG/" ./deploy/deployment.yml 
+          sudo sed "s/first/$TAG/" ./deploy/deployment.yml
 
       - name: Deploy app
         if: github.ref_type == 'tag' # == 
@@ -69,7 +69,7 @@ jobs:
       - name: Check deployment
         if: github.ref_type == 'tag' # ==
         run: |
-         cat ./deploy/deployment.yml 
+         sudo cat ./deploy/deployment.yml 
 
 
       # - name: restart
